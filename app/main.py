@@ -10,7 +10,8 @@ from app.api import SchoolClass
 from app.api import teachers
 from app.api import subjects
 from app.api import attendance
-
+from app.api import exams
+from app.api import fees
 
 
 
@@ -34,8 +35,8 @@ app.include_router(teachers.router, prefix="/api/teachers", tags=["Teachers"])
 app.include_router(SchoolClass.router, prefix="/api/classes", tags=["Classes"])
 app.include_router(subjects.router, prefix="/api/subjects", tags=["Subjects"])
 app.include_router(attendance.router, prefix="/api/attendance", tags=["Attendance"])
-# app.include_router(exams.router, prefix="/api/exams", tags=["Exams"])
-# app.include_router(fees.router, prefix="/api/fees", tags=["Fees"])
+app.include_router(exams.router, prefix="/api/exams", tags=["Exams"])
+app.include_router(fees.router, prefix="/api/fees", tags=["Fees"])
 app.include_router(announcements.router, prefix="/api/announcements", tags=["Announcements"])
 
 @app.get("/")
