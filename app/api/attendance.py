@@ -17,3 +17,15 @@ def get_attendance(
     student_id: Optional[int] = None,
     db: Session = Depends(get_db)): 
     return attendance_co.get_attendance(date_filter,class_id,student_id,db)
+
+
+#  add aatendance 
+@router.post("/", response_model=AttendanceOut)
+def mark_attendance(data: AttendanceCreate, db: Session = Depends(get_db)):
+         return  attendance_co.mark_attendance(data,db)
+
+
+# update attendance 
+@router.put("/{attendance_id}", response_model=AttendanceOut)
+def update_attendance(attendance_id: int, data: AttendanceCreate, db: Session = Depends(get_db)):
+    return attendance_co.update_attendance(attendance_id,data,db)

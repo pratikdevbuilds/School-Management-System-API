@@ -8,9 +8,9 @@ from app.schema.schemas import AttendanceCreate, AttendanceOut
 
 # get attendances
 def get_attendance(
-    date_filter: Optional[date] = Query(None, alias="date"),
-    class_id: Optional[int] = None,
-    student_id: Optional[int] = None,
+    date_filter ,
+    class_id ,
+    student_id,
     db: Session = Depends(get_db)
 ): 
     query = db.query(Attendance)
@@ -21,3 +21,21 @@ def get_attendance(
     if student_id:
         query = query.filter(Attendance.student_id == student_id)
     return query.all()
+
+
+#  add aatendence 
+def mark_attendance(data: AttendanceCreate, db: Session):
+    attendance = Attendance(**data.model_dump())
+    db.add(attendance)
+    db.commit()
+    db.refresh(attendance)
+    return attendance
+
+# update attendance 
+def update_attendance(attendance_id: int, data: AttendanceCreate, db: Session = Depends(get_db)):
+    record = db.query(Attendance).filter(Attendance.id == attendance_id).first()
+    for key, value in data.model_dump().items():
+        setattr(record, key, value)
+    db.commit()
+    db.refresh(record)
+    return record

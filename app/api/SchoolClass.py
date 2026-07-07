@@ -15,7 +15,25 @@ def get_classes(db: Session = Depends(get_db)):
     return SchoolClass_co.get_classes(db)
 
 
+#  get class by id
+@router.get("/{class_id}", response_model=ClassOut)
+def get_class(class_id: int, db: Session = Depends(get_db)):
+    return SchoolClass_co.get_class(class_id,db)
+   
+
+
 # add class and details 
 @router.post("/", response_model=ClassOut)
 def create_class(data: ClassCreate, db: Session = Depends(get_db)):
     return SchoolClass_co.create_class(data,db)
+
+# update and edit data
+@router.put("/{class_id}", response_model=ClassOut)
+def update_class(class_id: int, data: ClassCreate, db: Session = Depends(get_db)):
+ return SchoolClass_co.update_class(class_id,data,db)
+
+
+# delete data 
+@router.delete("/{class_id}")
+def delete_class(class_id: int, db: Session = Depends(get_db)):
+ return delete_class(class_id,db)

@@ -13,7 +13,24 @@ router = APIRouter()
 def get_students(db: Session = Depends(get_db)):
     return student_co.get_students(db)
 
+#  get by id 
+@router.get("/{student_id}", response_model=StudentOut)
+def get_student(student_id: int, db: Session = Depends(get_db)):
+     return student_co.get_student(student_id,db)
 
+
+# add students
 @router.post("/", response_model=StudentOut)
 def create_student(data: StudentCreate, db: Session = Depends(get_db)):
      return student_co.create_student(data,db) 
+
+
+# update and create student 
+@router.put("/{student_id}", response_model=StudentOut)
+def update_student(student_id: int, data: StudentCreate, db: Session = Depends(get_db)):
+     return student_co.update_student(student_id,data,db)
+
+# delete the data
+@router.delete("/{student_id}")
+def delete_student(student_id: int, db: Session = Depends(get_db)):
+   return student_co.delete_student(student_id,db)
