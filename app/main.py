@@ -1,4 +1,4 @@
-# student chal rha tha app api and controller me  (controller/classes_co.py) and (api/classes.py) check kar lena create and update dono kar lena them subjects pr shift hona after that other 
+ 
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
