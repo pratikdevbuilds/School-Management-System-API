@@ -197,6 +197,12 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
 
+class UserRole(str, Enum):
+    ADMIN = "Admin"
+    TEACHER = "Teacher"
+    STUDENT = "Student"
+
+
 
 
 
