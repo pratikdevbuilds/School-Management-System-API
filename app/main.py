@@ -2,7 +2,6 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from app.db.database import engine, Base
 from app.api import  announcements
 from app.api import student
@@ -12,6 +11,7 @@ from app.api import subjects
 from app.api import attendance
 from app.api import exams
 from app.api import fees
+from app.api import user
 
 
 
@@ -38,6 +38,10 @@ app.include_router(attendance.router, prefix="/api/attendance", tags=["Attendanc
 app.include_router(exams.router, prefix="/api/exams", tags=["Exams"])
 app.include_router(fees.router, prefix="/api/fees", tags=["Fees"])
 app.include_router(announcements.router, prefix="/api/announcements", tags=["Announcements"])
+app.include_router(user.router, prefix="/api/user", tags=["User"])
+
+
+# Home page 
 
 @app.get("/")
 def root():
