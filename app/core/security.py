@@ -71,4 +71,3 @@ def get_current_user(
         raise credentials_exception
 
     return user
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyb2JpbkBnbWFpbC5jb20iLCJleHAiOjE3ODQxNDY4MTJ9.yz3Rx4Xpgsq4rh0L5PVjomPeDa5y-isK1DbAgwho4xA
