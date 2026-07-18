@@ -2,15 +2,16 @@ from fastapi import  Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.db.database import get_db
-from app.models.models import Exam, ExamResult
+from app.models.models import Exam, ExamResult,User
 from app.schema.schemas import ExamCreate, ExamOut
+
  
 # get exams 
-def get_exams(db: Session ):
+def get_exams(db: Session,current_user :User ):
     return db.query(Exam).all()
 
 #  add exams 
-def create_exam(data: ExamCreate, db: Session ):
+def create_exam(data: ExamCreate, db: Session ,current_user :User):
     exam = Exam(**data.model_dump())
     db.add(exam)
     db.commit()
@@ -18,7 +19,7 @@ def create_exam(data: ExamCreate, db: Session ):
     return exam
 
 #  update exams 
-def update_exam(exam_id: int, data: ExamCreate, db: Session ):
+def update_exam(exam_id: int, data: ExamCreate, db: Session ,current_user :User):
     exam = db.query(Exam).filter(Exam.id == exam_id).first()
     if not exam:
         raise HTTPException(status_code=404, detail="Exam not found")
@@ -29,7 +30,7 @@ def update_exam(exam_id: int, data: ExamCreate, db: Session ):
     return exam
 
 # delete exam
-def delete_exam(exam_id: int, db: Session ):
+def delete_exam(exam_id: int, db: Session,current_user :User ):
     exam = db.query(Exam).filter(Exam.id == exam_id).first()
     if not exam:
         raise HTTPException(status_code=404, detail="Exam not found")

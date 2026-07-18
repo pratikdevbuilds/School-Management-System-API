@@ -5,32 +5,34 @@ from app.db.database import get_db
 from app.models.models import Student
 from app.schema.schemas import StudentCreate, StudentOut
 from app.controller import student_co
+from app.models.models import User
+from app.core.security import require_admin,require_teacher_or_admin,require_student
 router = APIRouter()
 
 
 # get all students
-@router.get("/", response_model=List[StudentOut])
-def get_students(db: Session = Depends(get_db)):
-    return student_co.get_students(db)
+@router.get("/", response_model=List[StudentOut],)
+def get_students(db: Session = Depends(get_db),current_user: User = Depends(require_teacher_or_admin)):
+    return student_co.get_students(db,current_user)
 
 #  get by id 
 @router.get("/{student_id}", response_model=StudentOut)
-def get_student(student_id: int, db: Session = Depends(get_db)):
-     return student_co.get_student(student_id,db)
+def get_student(student_id: int, db: Session = Depends(get_db),current_user: User = Depends(require_teacher_or_admin)):
+     return student_co.get_student(student_id,db,current_user)
 
 
 # add students
 @router.post("/", response_model=StudentOut)
-def create_student(data: StudentCreate, db: Session = Depends(get_db)):
-     return student_co.create_student(data,db) 
+def create_student(data: StudentCreate, db: Session = Depends(get_db) ,current_user: User = Depends(require_admin)):
+     return student_co.create_student(data,db,current_user) 
 
 
 # update and create student 
 @router.put("/{student_id}", response_model=StudentOut)
-def update_student(student_id: int, data: StudentCreate, db: Session = Depends(get_db)):
-     return student_co.update_student(student_id,data,db)
+def update_student(student_id: int, data: StudentCreate, db: Session = Depends(get_db),current_user: User = Depends(require_teacher_or_admin)):
+     return student_co.update_student(student_id,data,db,current_user)
 
 # delete the data
 @router.delete("/{student_id}")
-def delete_student(student_id: int, db: Session = Depends(get_db)):
-   return student_co.delete_student(student_id,db)
+def delete_student(student_id: int, db: Session = Depends(get_db),current_user:User = Depends(require_admin)):
+   return student_co.delete_student(student_id,db,current_user)

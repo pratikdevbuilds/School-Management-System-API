@@ -71,3 +71,40 @@ def get_current_user(
         raise credentials_exception
 
     return user
+
+# require_admin()
+
+def require_admin(
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "Admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only Admin can perform this action"
+        )
+
+    return current_user
+
+# require_teacher_or_admin()
+def require_teacher_or_admin(
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role not in ["Admin", "Teacher"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Permission denied"
+        )
+
+    return current_user
+
+# require_student()     
+def require_student(
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "Student":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only Student can access this resource"
+        )
+
+    return current_user

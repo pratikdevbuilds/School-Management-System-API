@@ -46,3 +46,12 @@ app.include_router(user.router, prefix="/api/user", tags=["User"])
 @app.get("/")
 def root():
     return {"message": "School Management API is running"}   
+
+
+
+'''
+1.depandence add
+2. student curd check 
+3. auth check 
+4. security.py ->  tokrn depandency 
+'''

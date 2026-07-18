@@ -2,16 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.db.database import get_db
-from app.models.models import SchoolClass
+from app.models.models import SchoolClass, User
+
 from app.schema.schemas import ClassCreate, ClassOut
 
-
 # get all classes 
-def get_classes(db: Session):
+def get_classes(db: Session,current_user:User):
     return db.query(SchoolClass).all()
 
 #  get class by id
-def get_class(class_id: int, db: Session):
+def get_class(class_id: int, db: Session,current_user:User):
     sc = db.query(SchoolClass).filter(SchoolClass.id == class_id).first()
     if not sc:
         raise HTTPException(status_code=404, detail="Class not found")
@@ -19,7 +19,7 @@ def get_class(class_id: int, db: Session):
 
 
 # add classes and details 
-def create_class(data: ClassCreate, db: Session ):
+def create_class(data: ClassCreate, db: Session ,current_user:User):
     sc = SchoolClass(**data.model_dump())
     db.add(sc)
     db.commit()
@@ -28,7 +28,7 @@ def create_class(data: ClassCreate, db: Session ):
 
 
 # update and edit the info
-def update_class(class_id: int, data: ClassCreate, db: Session ):
+def update_class(class_id: int, data: ClassCreate, db: Session ,current_user:User):
     sc = db.query(SchoolClass).filter(SchoolClass.id == class_id).first()
     if not sc:
         raise HTTPException(status_code=404, detail="Class not found")
@@ -39,7 +39,7 @@ def update_class(class_id: int, data: ClassCreate, db: Session ):
     return sc 
 
 # reset and delet the classes data
-def delete_class(class_id: int, db: Session):
+def delete_class(class_id: int, db: Session ,current_user:User):
     sc = db.query(SchoolClass).filter(SchoolClass.id == class_id).first()
     if not sc:
         raise HTTPException(status_code=404, detail="Class not found")

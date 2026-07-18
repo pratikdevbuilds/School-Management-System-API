@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import date
 from app.db.database import get_db
-from app.models.models import Attendance
+from app.models.models import Attendance,User
 from app.schema.schemas import AttendanceCreate, AttendanceOut
 
 # get attendances
@@ -11,7 +11,8 @@ def get_attendance(
     date_filter ,
     class_id ,
     student_id,
-    db: Session = Depends(get_db)
+    db: Session,
+    current_user :User
 ): 
     query = db.query(Attendance)
     if date_filter:
@@ -24,7 +25,7 @@ def get_attendance(
 
 
 #  add aatendence 
-def mark_attendance(data: AttendanceCreate, db: Session):
+def mark_attendance(data: AttendanceCreate, db: Session,current_user :User):
     attendance = Attendance(**data.model_dump())
     db.add(attendance)
     db.commit()
@@ -32,7 +33,7 @@ def mark_attendance(data: AttendanceCreate, db: Session):
     return attendance
 
 # update attendance 
-def update_attendance(attendance_id: int, data: AttendanceCreate, db: Session = Depends(get_db)):
+def update_attendance(attendance_id: int, data: AttendanceCreate, db: Session ,current_user :User):
     record = db.query(Attendance).filter(Attendance.id == attendance_id).first()
     for key, value in data.model_dump().items():
         setattr(record, key, value)

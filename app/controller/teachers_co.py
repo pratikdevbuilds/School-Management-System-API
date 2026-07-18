@@ -2,16 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.db.database import get_db
-from app.models.models import Teacher
+from app.models.models import Teacher,User
 from app.schema.schemas import TeacherCreate, TeacherOut
 
 
 # get all teachers 
-def get_teachers(db: Session = Depends(get_db)):
+def get_teachers(db: Session ,current_user:User):
     return db.query(Teacher).all()
 
 #  get teacher by id 
-def get_teacher(teacher_id: int, db: Session):
+def get_teacher(teacher_id: int, db: Session,current_user:User):
     teacher = db.query(Teacher).filter(Teacher.id == teacher_id).first()
     if not teacher:
         raise HTTPException(status_code=404, detail="Teacher not found")
@@ -19,7 +19,7 @@ def get_teacher(teacher_id: int, db: Session):
 
 
 # add teachers and details 
-def create_teacher(data: TeacherCreate, db: Session):
+def create_teacher(data: TeacherCreate, db: Session,current_user:User):
     teacher = Teacher(**data.model_dump())
     db.add(teacher)
     db.commit()
@@ -27,7 +27,7 @@ def create_teacher(data: TeacherCreate, db: Session):
     return teacher  
 
 #  update teacher info or detail
-def update_teacher(teacher_id: int, data: TeacherCreate, db: Session):
+def update_teacher(teacher_id: int, data: TeacherCreate, db: Session,current_user:User):
     teacher = db.query(Teacher).filter(Teacher.id == teacher_id).first()
     if not teacher:
         raise HTTPException(status_code=404, detail="Teacher not found")
@@ -39,7 +39,7 @@ def update_teacher(teacher_id: int, data: TeacherCreate, db: Session):
 
 
 # delete teacher 
-def delete_teacher(teacher_id: int, db: Session):
+def delete_teacher(teacher_id: int, db: Session,current_user:User):
     teacher = db.query(Teacher).filter(Teacher.id == teacher_id).first()
     if not teacher:
         raise HTTPException(status_code=404, detail="Teacher not found")
