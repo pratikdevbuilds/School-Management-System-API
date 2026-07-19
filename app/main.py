@@ -49,9 +49,4 @@ def root():
 
 
 
-'''
-1.depandence add
-2. student curd check 
-3. auth check 
-4. security.py ->  tokrn depandency 
-'''
+ 

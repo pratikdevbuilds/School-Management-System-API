@@ -108,3 +108,13 @@ def require_student(
         )
 
     return current_user
+def require_teacher_or_admin(
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role not in ["Admin", "Teacher"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Permission denied"
+        )
+
+    return current_user

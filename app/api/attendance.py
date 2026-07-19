@@ -6,7 +6,7 @@ from app.db.database import get_db
 from app.models.models import Attendance,User
 from app.schema.schemas import AttendanceCreate, AttendanceOut
 from app.controller import attendance_co
-from app.core.security import require_admin,require_student,require_teacher_or_admin
+from app.core.security import require_admin,require_student,require_teacher_or_admin,get_current_user
 
 router = APIRouter()
 
@@ -16,7 +16,7 @@ def get_attendance(
     date_filter: Optional[date] = Query(None, alias="date"),
     class_id: Optional[int] = None,
     student_id: Optional[int] = None,
-    db: Session = Depends(get_db),current_user: User = Depends(require_student)): 
+    db: Session = Depends(get_db),current_user: User = Depends(get_current_user)): 
     return attendance_co.get_attendance(date_filter,class_id,student_id,db)
 
 

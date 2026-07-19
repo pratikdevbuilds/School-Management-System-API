@@ -5,12 +5,12 @@ from app.db.database import get_db
 from app.models.models import Exam, ExamResult,User
 from app.schema.schemas import ExamCreate, ExamOut
 from app.controller import exams_co
-from app.core.security import require_admin,require_student,require_teacher_or_admin
+from app.core.security import require_admin,require_student,require_teacher_or_admin,get_current_user
 
 router = APIRouter()
 # get  exams details 
 @router.get("/", response_model=List[ExamOut])
-def get_exams(db: Session = Depends(get_db),current_user: User = Depends(require_student)):
+def get_exams(db: Session = Depends(get_db),current_user: User = Depends(get_current_user)):
     return exams_co.get_exams(db,current_user)
 
 # add exam  
